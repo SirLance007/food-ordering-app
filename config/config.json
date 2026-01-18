@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "prankursharma",
+    "password": null,
+    "database": "food_ordering_db",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "prankursharma",
+    "password": null,
+    "database": "food_ordering_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "prankursharma",
+    "password": null,
+    "database": "food_ordering_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
