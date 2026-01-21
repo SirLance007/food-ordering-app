@@ -30,7 +30,7 @@ module.exports = (sequelize , DataTypes) => {
         category : DataTypes.STRING,
         is_available : {
             type : DataTypes.BOOLEAN,
-            defaultValue : truncateSync
+            defaultValue : true
         }
     }, {
         sequelize,
