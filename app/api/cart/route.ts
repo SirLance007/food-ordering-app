@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+export const runtime = "nodejs";
+
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import CartItem from '@/models/CartItem';
-import MenuItem from '@/models/MenuItem';
-import User from '@/models/User';
+const { CartItem, MenuItem, User } = require('../../../lib/db.ts');
 
 export async function GET() {
     try {
@@ -31,15 +31,15 @@ export async function GET() {
             where: { user_id: user.id },
             include: [{
                 model: MenuItem,
-                as: "menu_item"
+                foreignKey: 'menu_item_id'
             }],
-            order: [['added_at', 'DESC']]
+            order: [['created_at', 'DESC']]
         })
 
         return NextResponse.json({
             success: true,
             data: cartItems
-        }, { status: 201 })
+        }, { status: 200 })
     } catch (err) {
         return NextResponse.json({
             success: false,
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
         const cartItemWithDetails = await CartItem.findByPk(cartItem.id, {
             include: [{
                 model: MenuItem,
-                as: 'menu_item'
+                foreignKey: 'menu_item_id'
             }]
         });
 
