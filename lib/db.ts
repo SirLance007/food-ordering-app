@@ -53,7 +53,11 @@ const User = sequelize.define('User', {
     unique: true
   },
   phone: DataTypes.STRING,
-  address: DataTypes.TEXT
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'oauth_user' // Default for OAuth users
+  }
 }, {
   tableName: 'users',
   underscored: true
