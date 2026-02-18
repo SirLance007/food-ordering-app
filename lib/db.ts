@@ -3,24 +3,40 @@ const pg = require('pg');
 const { Sequelize, DataTypes } = require('sequelize');
 
 // Create sequelize instance
-const sequelize = new Sequelize(
-  process.env.DB_NAME || 'food_ordering_db',
-  process.env.DB_USER || 'prankursharma',
-  process.env.DB_PASSWORD || 'Prankur@2005',
-  {
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: Number(process.env.DB_PORT) || 5432,
+// Create sequelize instance
+let sequelize;
+
+if (process.env.DATABASE_URL) {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
-    logging: false,
     dialectModule: pg,
-    dialectOptions: process.env.NODE_ENV === 'production' ? {
+    dialectOptions: {
       ssl: {
         require: true,
         rejectUnauthorized: false
       }
-    } : undefined,
-  }
-);
+    }
+  });
+} else {
+  sequelize = new Sequelize(
+    process.env.DB_NAME || 'food_ordering_db',
+    process.env.DB_USER || 'prankursharma',
+    process.env.DB_PASSWORD || 'Prankur@2005',
+    {
+      host: process.env.DB_HOST || '127.0.0.1',
+      port: Number(process.env.DB_PORT) || 5432,
+      dialect: 'postgres',
+      logging: false,
+      dialectModule: pg,
+      dialectOptions: process.env.NODE_ENV === 'production' ? {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      } : undefined,
+    }
+  );
+}
 
 // Define all models directly here
 const MenuItem = sequelize.define('MenuItem', {

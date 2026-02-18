@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: food-ordering-app
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: food-ordering-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: NEXTAUTH_URL
+        sync: false
+
+databases:
+  - name: food-ordering-db
+    databaseName: food_ordering_db
+    user: food_user
+    plan: free
