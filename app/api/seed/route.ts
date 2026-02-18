@@ -10,35 +10,51 @@ export async function GET() {
 
         await MenuItem.bulkCreate([
             {
+                name: 'Avocado Toast',
+                price: 8.50,
+                description: 'Sourdough toast topped with smashed avocado, cherry tomatoes, and microgreens.',
+                image_url: '/images/avocado_toast.png',
+                category: 'Food',
+                is_available: true
+            },
+            {
+                name: 'Vanilla Latte',
+                price: 5.00,
+                description: 'Smooth espresso with steamed milk and vanilla syrup.',
+                image_url: '/images/vanilla_latte.png',
+                category: 'Coffee',
+                is_available: true
+            },
+            {
                 name: 'Butter Chicken',
-                price: 350,
-                description: 'Creamy tomato curry with tender chicken pieces',
+                price: 14.00,
+                description: 'Creamy, rich Butter Chicken served with naan bread.',
                 image_url: '/images/butter_chicken.png',
-                category: 'Main Course',
+                category: 'Food',
                 is_available: true
             },
             {
-                name: 'Paneer Tikka',
-                price: 280,
-                description: 'Grilled cottage cheese cubes with spices',
-                image_url: '/images/paneer_tikka.png', // You might need to update this if you don't have the image
-                category: 'Starters',
+                name: 'Cappuccino',
+                price: 4.50,
+                description: 'Rich espresso with a thick layer of milk foam.',
+                image_url: '/images/cappuccino.png',
+                category: 'Coffee',
                 is_available: true
             },
             {
-                name: 'Naan',
-                price: 40,
-                description: 'Traditional Indian bread',
-                image_url: '/images/naan.png',
-                category: 'Breads',
+                name: 'Blueberry Muffin',
+                price: 3.50,
+                description: 'Freshly baked muffin with real blueberries.',
+                image_url: '/images/blueberry_muffin.png',
+                category: 'Pastries',
                 is_available: true
             },
             {
-                name: 'Gulab Jamun',
-                price: 120,
-                description: 'Sweet milk dumplings dipped in syrup',
-                image_url: '/images/gulab_jamun.png',
-                category: 'Desserts',
+                name: 'Croissant',
+                price: 3.00,
+                description: 'Buttery, flaky, and golden brown croissant.',
+                image_url: '/images/croissant.png',
+                category: 'Pastries',
                 is_available: true
             }
         ]);
