@@ -9,9 +9,16 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD || 'Prankur@2005',
   {
     host: process.env.DB_HOST || '127.0.0.1',
+    port: Number(process.env.DB_PORT) || 5432,
     dialect: 'postgres',
     logging: false,
-    dialectModule: pg, // Explicitly pass pg module
+    dialectModule: pg,
+    dialectOptions: process.env.NODE_ENV === 'production' ? {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    } : undefined,
   }
 );
 
@@ -95,7 +102,12 @@ const Order = sequelize.define('Order', {
     type: DataTypes.STRING,
     defaultValue: 'pending'
   },
-  delivery_address: DataTypes.TEXT
+  delivery_address: DataTypes.TEXT,
+  payment_mode: {
+    type: DataTypes.STRING,
+    defaultValue: 'cod',
+    allowNull: false
+  }
 }, {
   tableName: 'orders',
   underscored: true
@@ -139,7 +151,7 @@ Order.hasMany(OrderItem, { foreignKey: 'order_id' });
 OrderItem.belongsTo(Order, { foreignKey: 'order_id' });
 OrderItem.belongsTo(MenuItem, { foreignKey: 'menu_item_id' });
 
-module.exports = {
+export {
   sequelize,
   MenuItem,
   User,
