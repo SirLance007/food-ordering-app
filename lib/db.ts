@@ -4,7 +4,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 // Create sequelize instance
 // Create sequelize instance
-let sequelize;
+let sequelize: any;
 
 if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
