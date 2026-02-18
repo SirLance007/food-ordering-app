@@ -3,11 +3,10 @@ import { MenuItem } from '@/lib/db';
 
 export async function GET() {
     try {
-        // 1. Delete all existing items
-        await MenuItem.destroy({ where: {}, truncate: true });
+        // We CANNOT delete/truncate because Orders/CartItems might reference these menu items.
+        // Instead, we will loop through and UPDATE existing ones or CREATE new ones.
 
-        // 2. Re-seed with correct items (from scripts/seed.js)
-        await MenuItem.bulkCreate([
+        const menuItems = [
             // COFFEE
             {
                 name: "Cappuccino",
@@ -75,11 +74,28 @@ export async function GET() {
                 image_url: "https://images.unsplash.com/photo-1588137372308-15f75323ca8f?w=500&q=80",
                 is_available: true
             }
-        ]);
+        ];
 
-        return NextResponse.json({ message: 'Database RESET and re-seeded successfully with COMPLETE items!' });
+        let createdCount = 0;
+        let updatedCount = 0;
+
+        for (const item of menuItems) {
+            const existing = await MenuItem.findOne({ where: { name: item.name } });
+            if (existing) {
+                await existing.update(item);
+                updatedCount++;
+            } else {
+                await MenuItem.create(item);
+                createdCount++;
+            }
+        }
+
+        return NextResponse.json({
+            message: 'Database updated successfully!',
+            details: `Created ${createdCount} new items, Updated ${updatedCount} existing items.`
+        });
     } catch (error: any) {
         console.error('Reset seed error:', error);
-        return NextResponse.json({ message: 'Error resetting database', error: error.message }, { status: 500 });
+        return NextResponse.json({ message: 'Error updating database', error: error.message }, { status: 500 });
     }
 }
