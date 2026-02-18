@@ -15,18 +15,17 @@ interface MenuCategory {
     items: MenuItems[];
 }
 
+import { MenuItem } from "@/lib/db";
+
 async function getMenuItems(): Promise<MenuCategory[]> {
     try {
-        const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-        const res = await fetch(baseUrl + '/api/menuitems', { cache: 'no-store' });
-
-        if (!res.ok) return [];
-
-        const data = await res.json();
-        if (!data.success || !Array.isArray(data.data)) return [];
+        const items = await MenuItem.findAll({
+            where: { is_available: true },
+            order: [['category', 'ASC']]
+        });
 
         // Group items by category
-        const groupedItems = data.data.reduce((acc: any, item: any) => {
+        const groupedItems = items.reduce((acc: any, item: any) => {
             const category = item.category || 'Other';
             if (!acc[category]) {
                 acc[category] = [];
@@ -36,9 +35,9 @@ async function getMenuItems(): Promise<MenuCategory[]> {
                 id: item.id,
                 name: item.name,
                 price: item.price.toString(),
-                rating: item.rating || "4.5", // Default rating if missing
-                subtitle: item.description || item.subtitle || "",
-                image: item.image_url || item.image || "/images/placeholder-food.png" // Fallback image
+                rating: "4.5", // Default rating
+                subtitle: item.description || "",
+                image: item.image_url || "/images/placeholder-food.png"
             });
 
             return acc;
